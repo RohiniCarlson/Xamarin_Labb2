@@ -1,0 +1,283 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+
+using Android.App;
+using Android.Content;
+using Android.OS;
+using Android.Runtime;
+using Android.Views;
+using Android.Widget;
+
+namespace Labb2
+{
+    [Activity(Label = "Händelse")]
+    public class CreateNewEntryActivity : Activity
+    {
+        const int DATE_DIALOG_ID = 0;
+        private EditText dateOfEntry, totalWithTax, entryDescription;
+        private Button datePickerButton, saveButton, deleteButton;
+        private DateTime date;        
+        private RadioButton income_radio, cost_radio;
+        private Spinner typeSpinner, accountSpinner, taxSpinner;
+        private ArrayAdapter typeSpinnerAdapter, accountSpinnerAdapter, taxSpinnerAdapter;
+        private TextView totalWithoutTax;
+        private string activityType;
+        private BookKeeperManager bookKeeperManager;
+        private int entryId;
+        Entry entry;
+
+        protected override void OnCreate(Bundle bundle)
+        {
+            base.OnCreate(bundle);
+
+            // Set our view from the "activity_create_new_entry" layout resource
+            SetContentView(Resource.Layout.activity_create_new_entry);
+
+            // Get an instance of BookKeeperManager
+            bookKeeperManager = BookKeeperManager.Instance;
+
+            dateOfEntry = FindViewById<EditText>(Resource.Id.date_edit);
+            datePickerButton = FindViewById<Button>(Resource.Id.date_picker_button);
+            entryDescription = FindViewById<EditText>(Resource.Id.entry_description_edit);
+            typeSpinner = FindViewById<Spinner>(Resource.Id.type_spinner);
+            income_radio = FindViewById<RadioButton>(Resource.Id.income_radio_button);
+            cost_radio = FindViewById<RadioButton>(Resource.Id.cost_radio_button);
+            accountSpinner = FindViewById<Spinner>(Resource.Id.account_spinner);
+            taxSpinner = FindViewById<Spinner>(Resource.Id.tax_spinner);
+            totalWithoutTax = FindViewById<TextView>(Resource.Id.calculated_total_without_tax_text);
+            totalWithTax = FindViewById<EditText>(Resource.Id.total_with_tax_edit);
+            saveButton = FindViewById<Button>(Resource.Id.save_entry_button);
+            deleteButton = FindViewById<Button>(Resource.Id.delete_entry_button);
+
+            activityType = Intent.GetStringExtra("activityType");
+            if ("new".Equals(activityType))
+            {
+                // Create new
+                // Set the income radio button checked by default
+                income_radio.Checked = true;
+
+                // Set the date field to current date
+                date = DateTime.Today;
+                UpdateDate();
+                deleteButton.Enabled = false;
+            }
+            else if ("update".Equals(activityType))
+            {
+                // As soon as user changes something, enable savebutton
+                // saveButton.Enabled = false;
+
+                entryId = Intent.GetIntExtra("entryId", -1);
+                if (entryId != -1)
+                {
+                    // Get entry via id and populate fields
+                    entry = bookKeeperManager.GetEntry(entryId);
+                }
+                else
+                {
+                    Toast.MakeText(this, GetString(Resource.String.entry_not_found),ToastLength.Short).Show();
+                }                
+            }
+            else 
+            { 
+                // Do nothing --- show toast ??
+            }           
+            
+            // Populate the spinners
+            populateType();
+            PopulateAccount();
+            PopulateTax();
+
+            // Handle the click events on buttons and radio buttons
+            datePickerButton.Click += button_DatePicker;
+            saveButton.Click += button_SaveEntry;
+            income_radio.Click += spinner_PopulateType;
+            cost_radio.Click += spinner_PopulateType;
+
+            // Handle the ItemSelected event in the tax rates spinner
+            taxSpinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_TaxSelected);
+
+            // Handle the TextChanged event in the total amount with text edittext
+            totalWithTax.TextChanged += edittext_UpdateTotalWitoutTax;              
+        }
+
+        private void UpdateDate()
+        {
+            // dateOfEntry.Text = date.ToString("d");
+            dateOfEntry.Text = date.ToString("yyyy-MM-dd");
+        }
+
+        private void populateType()
+        {
+            if (income_radio.Checked)
+            {
+                typeSpinnerAdapter = new ArrayAdapter<Account>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.IncomeAccounts);
+
+            }
+            else if (cost_radio.Checked)
+            {
+                typeSpinnerAdapter = new ArrayAdapter<Account>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.ExpenseAccounts);
+            }
+            typeSpinnerAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            typeSpinner.Adapter = typeSpinnerAdapter;
+        }
+
+        private void PopulateAccount()
+        {
+            accountSpinnerAdapter = new ArrayAdapter<Account>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.MoneyAccounts);
+            accountSpinnerAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            accountSpinner.Adapter = accountSpinnerAdapter;
+        }
+
+        private void PopulateTax()
+        {
+            taxSpinnerAdapter = new ArrayAdapter<TaxRate>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.TaxRates);
+            taxSpinnerAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
+            taxSpinner.Adapter = taxSpinnerAdapter;
+        }
+
+        private void button_DatePicker(object sender, EventArgs e)
+        {
+            ShowDialog(DATE_DIALOG_ID);
+        }
+
+        protected override Dialog OnCreateDialog(int id)
+        {
+            switch (id)
+            {
+                case DATE_DIALOG_ID:
+                    return new DatePickerDialog(this, OnDateSet, date.Year, date.Month - 1, date.Day);
+            }
+            return null;
+        }
+
+        public void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
+        {
+            this.date = e.Date;
+            UpdateDate();
+        }
+     
+        private void button_SaveEntry(object sender, EventArgs e)
+        {
+            // Convert the selected spinner items to string and do necessary conversions
+            string taxRate = taxSpinner.SelectedItem.ToString();
+            taxRate = taxRate.Substring(0, taxRate.Length - 1); // Gets rid of the percentage sign at the end
+
+            // Retrieve the Ids of the selected spinner items
+            int accountId = GetAccountIdFromString(typeSpinner.SelectedItem.ToString());
+            int moneyAccountId = GetAccountIdFromString(accountSpinner.SelectedItem.ToString());
+            int taxRateId = bookKeeperManager.TaxRates.Find(t => t.Tax == Convert.ToDouble(taxRate)).Id;
+
+            if("new".Equals(activityType))
+            {
+                // Request BookKeeperManger to save the entry
+                bookKeeperManager.AddEntry(dateOfEntry.Text,
+                                                    FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
+                                                    accountId,
+                                                    moneyAccountId,
+                                                    Convert.ToDouble(totalWithTax.Text),
+                                                    taxRateId);
+                Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
+            }
+            else if ("update".Equals(activityType))
+            {
+                if (entryId != -1)
+                {
+                    // Request BookKeeperManger to update the entry
+                    bookKeeperManager.UpdateEntry(entryId,
+                                                  dateOfEntry.Text,
+                                                  FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
+                                                  accountId,
+                                                  moneyAccountId,
+                                                  Convert.ToDouble(totalWithTax.Text),
+                                                  taxRateId);
+                    Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
+                }
+            }
+            resetEntries();
+        }
+
+        private int GetAccountIdFromString(string s)
+        {
+            int index = s.IndexOf(" ");
+            return int.Parse(s.Substring(0,index));
+        }    
+
+        private void spinner_PopulateType(object sender, EventArgs e)
+        {
+            populateType();
+        }
+
+        private void spinner_TaxSelected(object sender, AdapterView.ItemSelectedEventArgs e)
+        {
+            Spinner s = (Spinner)sender;
+            double totalIncludingTax = 0.0;
+
+            if ((totalWithTax.Text.ToString().Length > 0) && (Convert.ToDouble(totalWithTax.Text.ToString()) > 0.0))
+            {
+                totalIncludingTax = Convert.ToDouble(totalWithTax.Text.ToString());
+                totalWithoutTax.Text = Convert.ToString(CalculateAmountWithoutTax(totalIncludingTax, s.SelectedItem.ToString()));
+            }
+        }
+      
+        private void edittext_UpdateTotalWitoutTax(object sender, Android.Text.TextChangedEventArgs e)
+        {
+            if ((totalWithTax.Text.ToString().Length > 0) && (Convert.ToDouble(totalWithTax.Text.ToString()) > 0.0))
+            {
+                totalWithoutTax.Text = Convert.ToString(CalculateAmountWithoutTax(Convert.ToDouble(totalWithTax.Text.ToString()), taxSpinner.SelectedItem.ToString()));
+            }
+            else
+            {
+                totalWithoutTax.Text = "";
+            }
+        }
+
+        private double CalculateAmountWithoutTax(double amountWithTax, string taxRate)
+        {
+            double tax = Convert.ToDouble(taxRate.Substring(0, taxRate.Length - 1));
+            tax = tax / 100;
+            return (amountWithTax - (amountWithTax * tax));
+        }
+
+        private void resetEntries()
+        {
+            // Reset date to current date
+            dateOfEntry.Text = DateTime.Today.ToString("yyyy-MM-dd");
+            //dateOfEntry.Text = DateTime.Today.ToString("d");
+
+            // Select income radio button
+            income_radio.Checked = true;
+
+            // Clear description
+            entryDescription.Text = "";
+
+            // Reset type spnner
+            populateType();
+
+            // Reset account spinner
+            accountSpinner.SetSelection(0, true);
+
+            // Clear total amount
+            totalWithTax.Text = "";
+
+            // Reset tax spinner
+            taxSpinner.SetSelection(0, true);
+
+            // Clear total without tax
+            totalWithoutTax.Text = "";
+        }
+
+        private int getIndex(Spinner spinner, String myString)
+        {
+            for (int i = 0; i < spinner.Count; i++)
+            {
+                if (spinner.GetItemAtPosition(i).Equals(myString))
+                {
+                   return i;
+                }
+            }
+            return -1;
+        }
+    }
+}

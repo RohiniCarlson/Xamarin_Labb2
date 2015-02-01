@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+  <string name="ApplicationName">Bokförare</string>
+  <!-- Main activity-->
+  <string name="create_new">NY HÄNDELSE</string>
+  <string name="show_all">VISA ALLA HÄNDELSER</string>
+  <string name="create_reports">SKAPA RAPPORTER</string>
+  
+  <!-- CreateNewEntry activity-->
+  <string name="new_entry_label">Här kan du lägga till nya händelser, antingen inkomster eller utgifter.</string>
+  <string name="income_radio_button_label">Inkomst</string>
+  <string name="cost_radio_button_label">Utgift</string>
+  <string name="date_picker">Välj Datum</string>
+  <string name="date_label">Datum:</string>
+  <string name="date_format">mm/dd/yyyy</string>
+  <string name="entry_description_label">Beskrivning:</string>
+  <string name="entry_created">Händelse sparad!</string>
+  <string name="entry_updated">Ändringarna sparad!</string>
+  <string name="entry_not_found">Händelsen hittats inte!</string>
+  
+  <!-- Type spinner -->
+  <string name="type_label">Typ:</string>
+  <string name="select_type">Välj typen</string>
+  <string-array name="income_array">
+    <item>Inkomst typ 1</item>
+    <item>Inkomst typ 2</item>
+    <item>Inkomst typ 3</item>
+    <item>Inkomst typ 4</item>
+  </string-array>
+  <string-array name="cost_array">
+    <item>Utgift typ 1</item>
+    <item>Utgift typ 2</item>
+    <item>Utgift typ 3</item>
+    <item>Utgift typ 4</item>
+  </string-array>
+ 
+  <!-- Account spinner-->
+  <string name="to_from_account_label">Till/från konto:</string>
+  <string name="select_account">Välj kontot</string>
+  <string-array name="account_array">
+    <item>Account typ 1</item>
+    <item>Account typ 2</item>
+    <item>Account typ 3</item>
+    <item>Account typ 4</item>
+  </string-array>
+  
+  <!-- Total including tax -->
+  <string name="total_with_tax_label">Total belopp (inkl moms):</string>
+
+  <!-- Tax rate spinner -->
+  <string name="tax_label">Moms:</string>
+  <string name="select_tax">Välj momsen</string>
+  <string-array name="tax_array">
+    <item>6%</item>
+    <item>12%</item>
+    <item>25%</item>
+  </string-array>
+  
+  <!-- Other -->
+  <string name="total_without_tax_label">Total belopp (exkl moms):</string>
+  <string name="save_entry_label">SPARA</string>
+  <string name="delete_entry_label">TA BORT</string>
+  <string name="currency">kr</string>
+</resources>

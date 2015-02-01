@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent">
+<!-- Info text-->
+    <TextView
+        android:id="@+id/new_entry_text"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:layout_marginLeft="5dp"
+        android:text="@string/new_entry_label" />
+<!-- Radio buttons for income and cost -->
+    <RadioGroup
+        android:orientation="vertical"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content">
+        <RadioButton
+            android:id="@+id/income_radio_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/income_radio_button_label" />
+        <RadioButton
+            android:id="@+id/cost_radio_button"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="@string/cost_radio_button_label" />
+    </RadioGroup>
+<!-- Date -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/date_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/date_label" />
+        <EditText
+            android:id="@+id/date_edit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:inputType="date"
+            android:hint="@string/date_format" />
+        <Button
+            android:id="@+id/date_picker_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/date_picker" />
+    </LinearLayout>
+<!-- Description -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/entry_description_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/entry_description_label" />
+        <EditText
+            android:id="@+id/entry_description_edit"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="text" />
+    </LinearLayout>
+<!-- Type -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/type_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/type_label" />
+        <Spinner
+            android:id="@+id/type_spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:prompt="@string/select_type" />
+    </LinearLayout>
+<!-- To/From Account -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/to_from_account_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/to_from_account_label" />
+        <Spinner
+            android:id="@+id/account_spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:prompt="@string/select_account" />
+    </LinearLayout>
+<!-- Total amount with tax -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/total_with_tax_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/total_with_tax_label" />
+        <EditText
+            android:id="@+id/total_with_tax_edit"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:inputType="number" />
+    </LinearLayout>
+<!-- Tax rate -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/tax_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/tax_label" />
+        <Spinner
+            android:id="@+id/tax_spinner"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:prompt="@string/select_type" />
+    </LinearLayout>
+<!-- Total amount without tax -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent">
+        <TextView
+            android:id="@+id/total_without_tax_text"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:layout_marginLeft="5dp"
+            android:text="@string/total_without_tax_label" />
+        <TextView
+            android:id="@+id/calculated_total_without_tax_text"
+            android:layout_height="wrap_content"
+            android:layout_width="fill_parent"
+            android:text="-" />
+    </LinearLayout>
+<!-- Create new entry button -->
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_height="wrap_content"
+        android:layout_width="fill_parent"
+        android:weightSum="2">
+        <Button
+            android:id="@+id/save_entry_button"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/save_entry_label" />
+        <Button
+            android:id="@+id/delete_entry_button"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/delete_entry_label" />
+    </LinearLayout>
+</LinearLayout>
