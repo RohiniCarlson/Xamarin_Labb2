@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Labb2
 {
-    [Activity(Label = "Alla Händelser")]
+    [Activity(Label = "Alla Händelser")]   
     public class ShowAllEntriesActivity : Activity
     {
         private ListView entriesListView;

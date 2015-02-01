@@ -6,7 +6,8 @@
   <string name="show_all">VISA ALLA HÄNDELSER</string>
   <string name="create_reports">SKAPA RAPPORTER</string>
   
-  <!-- CreateNewEntry activity-->
+  <!-- CreateNewEntryActivity-->
+  <!-- =======================-->
   <string name="new_entry_label">Här kan du lägga till nya händelser, antingen inkomster eller utgifter.</string>
   <string name="income_radio_button_label">Inkomst</string>
   <string name="cost_radio_button_label">Utgift</string>
@@ -61,4 +62,8 @@
   <string name="save_entry_label">SPARA</string>
   <string name="delete_entry_label">TA BORT</string>
   <string name="currency">kr</string>
+
+  <!-- ViewEntryActivity-->
+  <!-- =======================-->
+  <string name="view_entry_label">Händelse Detaljer</string>
 </resources>
