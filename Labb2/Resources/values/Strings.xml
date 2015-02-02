@@ -66,4 +66,8 @@
   <!-- ViewEntryActivity-->
   <!-- =======================-->
   <string name="view_entry_label">Händelse Detaljer</string>
+
+  <!-- ViewEntryActivity menu-->
+  <!-- =======================-->
+  <string name="edit">Uppdatera</string>
 </resources>

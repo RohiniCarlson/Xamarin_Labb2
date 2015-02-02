@@ -1186,6 +1186,9 @@ namespace Labb2
 			// aapt resource value: 0x7f080021
 			public const int activity_chooser_view_content = 2131230753;
 			
+			// aapt resource value: 0x7f080066
+			public const int activity_view_entry_menu = 2131230822;
+			
 			// aapt resource value: 0x7f080016
 			public const int always = 2131230742;
 			
@@ -1230,6 +1233,9 @@ namespace Labb2
 			
 			// aapt resource value: 0x7f08001c
 			public const int dropdown = 2131230748;
+			
+			// aapt resource value: 0x7f080067
+			public const int edit = 2131230823;
 			
 			// aapt resource value: 0x7f080033
 			public const int edit_query = 2131230771;
@@ -1672,6 +1678,9 @@ namespace Labb2
 			
 			// aapt resource value: 0x7f0a0028
 			public const int delete_entry_label = 2131361832;
+			
+			// aapt resource value: 0x7f0a002b
+			public const int edit = 2131361835;
 			
 			// aapt resource value: 0x7f0a001c
 			public const int entry_created = 2131361820;

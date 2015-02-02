@@ -67,51 +67,28 @@ namespace Labb2
 
         public override bool OnCreateOptionsMenu(Android.Views.IMenu menu)
         {
-            var actionItem = menu.Add(new Java.Lang.String("Action Button"));
-            MenuItemCompat.SetShowAsAction(actionItem, MenuItemCompat.ShowAsActionIfRoom);
-            actionItem.SetIcon(Android.Resource.Drawable.IcMenuEdit);
-           // return true;
-            return base.OnCreateOptionsMenu(menu);
-
-            /*
-             *  base.OnCreateOptionsMenu (menu);
-
-      MenuInflater inflater = this.MenuInflater;
-
-      inflater.Inflate (Resource.Menu.mainmenu, menu);
-
-      return true;*/
+            base.OnCreateOptionsMenu (menu);
+            MenuInflater inflater = new MenuInflater(this);
+            inflater.Inflate(Resource.Menu.activity_view_entry_menu, menu);
+            return true;
         }
 
-        /*
-         * public override bool OnOptionsItemSelected (IMenuItem item)
-    {
-      base.OnOptionsItemSelected (item);
-
-      switch (item.ItemId)
-      {
-      case Resource.Id.add:
-        break;
-      case Resource.Id.call:
-        {
-          Intent intent = new Intent (Intent.ActionDial);
-          StartActivity (intent);
-          break;
-        }
-      default:
-        break;
-      }
-
-      return true;
-    }
-         * */
         public override bool OnOptionsItemSelected(Android.Views.IMenuItem item)
         {
-            Android.Widget.Toast.MakeText(this,
-                "Selected Item: " +
-                item.TitleFormatted,
-                Android.Widget.ToastLength.Short).Show();
+            base.OnOptionsItemSelected (item);
 
+            switch(item.ItemId)
+            {
+                case Resource.Id.edit:
+                    {
+                        Toast.MakeText(this, "You clicked on the edit icon", ToastLength.Short).Show();
+                        break;
+                    }
+                default:
+                    {
+                        break;
+                    }
+            }
             return true;
         }
     }
