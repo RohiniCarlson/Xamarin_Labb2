@@ -19,7 +19,8 @@ namespace Labb2
     public class ViewEntryActivity : ActionBarActivity
     {
         private BookKeeperManager bookKeeperManager;
-        private TextView date, description, transactionAccount, moneyAccount, amount, taxRate;     
+        private TextView date, description, transactionAccount, moneyAccount, amount, taxRate;
+        private int entryId;
         protected override void OnCreate(Bundle bundle)
         {
             base.OnCreate(bundle);
@@ -41,10 +42,10 @@ namespace Labb2
             taxRate = FindViewById<TextView>(Resource.Id.view_tax_text);
 
 
-            int id = Intent.GetIntExtra("EntryId", -1);
-            if (id != -1)
+            entryId = Intent.GetIntExtra("EntryId", -1);
+            if (entryId != -1)
             {
-                Entry e = bookKeeperManager.GetEntry(id);               
+                Entry e = bookKeeperManager.GetEntry(entryId);               
                 Account account = bookKeeperManager.GetAccount(e.AccountNumber);
                 Account cashAccount = bookKeeperManager.GetAccount(e.MoneyAccountNumber);
                 TaxRate rate = bookKeeperManager.GetTaxRate(e.TaxId);
@@ -81,7 +82,8 @@ namespace Labb2
             {
                 case Resource.Id.edit:
                     {
-                        Toast.MakeText(this, "You clicked on the edit icon", ToastLength.Short).Show();
+                        //Toast.MakeText(this, "You clicked on the edit icon", ToastLength.Short).Show();
+                        GoToUpdateActivity();
                         break;
                     }
                 default:
@@ -90,6 +92,14 @@ namespace Labb2
                     }
             }
             return true;
+        }
+
+        private void GoToUpdateActivity()
+        {
+            Intent i = new Intent(this, typeof(CreateNewEntryActivity));
+            i.PutExtra("activityType", "update");
+            i.PutExtra("entryId", entryId);
+            StartActivity(i);
         }
     }
 }

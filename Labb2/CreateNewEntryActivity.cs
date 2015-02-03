@@ -54,41 +54,74 @@ namespace Labb2
             activityType = Intent.GetStringExtra("activityType");
             if ("new".Equals(activityType))
             {
-                // Create new
-                // Set the income radio button checked by default
                 income_radio.Checked = true;
-
-                // Set the date field to current date
                 date = DateTime.Today;
                 UpdateDate();
                 deleteButton.Enabled = false;
+                populateTypeSpinner();
+                PopulateAccountSpinner();
+                PopulateTaxSpinner();
+                HandleEvents(); 
             }
             else if ("update".Equals(activityType))
             {
                 // As soon as user changes something, enable savebutton
                 // saveButton.Enabled = false;
-
                 entryId = Intent.GetIntExtra("entryId", -1);
                 if (entryId != -1)
                 {
-                    // Get entry via id and populate fields
-                    entry = bookKeeperManager.GetEntry(entryId);
+                    SetUpEntryDataForUpdate();
+                    HandleEvents();
                 }
                 else
                 {
                     Toast.MakeText(this, GetString(Resource.String.entry_not_found),ToastLength.Short).Show();
-                }                
+                }             
             }
             else 
             { 
                 // Do nothing --- show toast ??
-            }           
-            
-            // Populate the spinners
-            populateType();
-            PopulateAccount();
-            PopulateTax();
+            }             
+        }
 
+        protected override void OnResume()
+        {
+            base.OnResume();
+            Toast.MakeText(this, "In OnResume()", ToastLength.Short).Show();
+        }
+        private void SetUpEntryDataForUpdate()
+        {
+            date = DateTime.Today;
+            // Get entry via id and populate fields
+            entry = bookKeeperManager.GetEntry(entryId);
+            entryDescription.Text = entry.Description;
+            dateOfEntry.Text = entry.Date;
+            totalWithTax.Text = entry.TotalAmount.ToString();
+
+            Account account = bookKeeperManager.GetAccount(entry.AccountNumber);
+            if (account.Type == Account.AccountType.Expense)
+            {
+                cost_radio.Checked = true;
+                populateTypeSpinner();
+                typeSpinner.SetSelection(bookKeeperManager.ExpenseAccounts.FindIndex(a => a.Number == account.Number), true);
+            }
+            else if (account.Type == Account.AccountType.Income)
+            {
+                income_radio.Checked = true;
+                populateTypeSpinner();
+                typeSpinner.SetSelection(bookKeeperManager.MoneyAccounts.FindIndex(a => a.Number == account.Number), true);
+            }
+            PopulateAccountSpinner();
+            account = bookKeeperManager.GetAccount(entry.MoneyAccountNumber);
+            accountSpinner.SetSelection(bookKeeperManager.MoneyAccounts.FindIndex(a => a.Number == account.Number), true);
+            
+            PopulateTaxSpinner();
+            TaxRate taxRate = bookKeeperManager.GetTaxRate(entry.TaxId);
+            taxSpinner.SetSelection(bookKeeperManager.TaxRates.FindIndex(a => a.Id == taxRate.Id), true);
+        }
+
+        private void HandleEvents()
+        {
             // Handle the click events on buttons and radio buttons
             datePickerButton.Click += button_DatePicker;
             saveButton.Click += button_SaveEntry;
@@ -99,16 +132,15 @@ namespace Labb2
             taxSpinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_TaxSelected);
 
             // Handle the TextChanged event in the total amount with text edittext
-            totalWithTax.TextChanged += edittext_UpdateTotalWitoutTax;              
+            totalWithTax.TextChanged += edittext_UpdateTotalWitoutTax;
         }
 
         private void UpdateDate()
         {
-            // dateOfEntry.Text = date.ToString("d");
             dateOfEntry.Text = date.ToString("yyyy-MM-dd");
         }
 
-        private void populateType()
+        private void populateTypeSpinner()
         {
             if (income_radio.Checked)
             {
@@ -123,14 +155,14 @@ namespace Labb2
             typeSpinner.Adapter = typeSpinnerAdapter;
         }
 
-        private void PopulateAccount()
+        private void PopulateAccountSpinner()
         {
             accountSpinnerAdapter = new ArrayAdapter<Account>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.MoneyAccounts);
             accountSpinnerAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
             accountSpinner.Adapter = accountSpinnerAdapter;
         }
 
-        private void PopulateTax()
+        private void PopulateTaxSpinner()
         {
             taxSpinnerAdapter = new ArrayAdapter<TaxRate>(this, Android.Resource.Layout.SimpleSpinnerItem, bookKeeperManager.TaxRates);
             taxSpinnerAdapter.SetDropDownViewResource(Android.Resource.Layout.SimpleSpinnerDropDownItem);
@@ -182,18 +214,15 @@ namespace Labb2
             }
             else if ("update".Equals(activityType))
             {
-                if (entryId != -1)
-                {
-                    // Request BookKeeperManger to update the entry
-                    bookKeeperManager.UpdateEntry(entryId,
-                                                  dateOfEntry.Text,
-                                                  FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
-                                                  accountId,
-                                                  moneyAccountId,
-                                                  Convert.ToDouble(totalWithTax.Text),
-                                                  taxRateId);
-                    Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
-                }
+                // Request BookKeeperManger to update the entry
+                bookKeeperManager.UpdateEntry(entryId,
+                                              dateOfEntry.Text,
+                                              FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
+                                              accountId,
+                                              moneyAccountId,
+                                              Convert.ToDouble(totalWithTax.Text),
+                                              taxRateId);
+                Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
             }
             resetEntries();
         }
@@ -206,7 +235,7 @@ namespace Labb2
 
         private void spinner_PopulateType(object sender, EventArgs e)
         {
-            populateType();
+            populateTypeSpinner();
         }
 
         private void spinner_TaxSelected(object sender, AdapterView.ItemSelectedEventArgs e)
@@ -252,8 +281,8 @@ namespace Labb2
             // Clear description
             entryDescription.Text = "";
 
-            // Reset type spnner
-            populateType();
+            // Reset type spinner
+            populateTypeSpinner();
 
             // Reset account spinner
             accountSpinner.SetSelection(0, true);
