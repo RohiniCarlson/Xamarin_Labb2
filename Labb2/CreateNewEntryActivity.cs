@@ -235,10 +235,10 @@ namespace Labb2
                 int height = Resources.DisplayMetrics.HeightPixels;
                 int width = receiptImage.Width;
                 Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(imagePathUri.Path, width, height);
-                receiptImage.SetImageBitmap(bitmap);
-                Toast.MakeText(this, "Pic saved at: " + imagePath, ToastLength.Long).Show();       
+                receiptImage.SetImageBitmap(bitmap);       
             }
             base.OnActivityResult(requestCode, resultCode, data);
+            Toast.MakeText(this, "Pic saved at: " + imagePath, ToastLength.Long).Show();
         }
      
         private void button_SaveEntry(object sender, EventArgs e)
