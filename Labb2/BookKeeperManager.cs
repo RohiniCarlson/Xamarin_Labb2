@@ -74,6 +74,19 @@ namespace Labb2
             }
         }
 
+        public int GetLastEntryId()
+        {
+            if (Entries.Count > 0)
+            {
+                Entry entry = Entries.ElementAt<Entry>(Entries.Count - 1);
+                return entry.Id;
+            }
+            else
+            {
+                return 1;
+            }            
+        }
+
         private BookKeeperManager()
         {
             DBPath = System.Environment.GetFolderPath(System.Environment.SpecialFolder.Personal);
@@ -119,6 +132,10 @@ namespace Labb2
         {
             get
             {
+                // Different ways of doing the same thing
+                // instance = instance ?? new BookKeeperManager();
+                // return instance ?? new BookKeeperManager();
+
                 if (instance == null)
                 {
                     instance = new BookKeeperManager();   
@@ -128,7 +145,7 @@ namespace Labb2
         }
 
         public void AddEntry(string date, string description, int accountNumber, int moneyAccountNumber,                             
-                             double total, int taxRateId)
+                             double total, int taxRateId, string imagePath)
         {
             SQLiteConnection db = new SQLiteConnection(DBPath);
             Entry e = new Entry { Date = date,
@@ -136,7 +153,8 @@ namespace Labb2
                                   AccountNumber = accountNumber,
                                   MoneyAccountNumber = moneyAccountNumber,
                                   TotalAmount = total,
-                                  TaxId = taxRateId };
+                                  TaxId = taxRateId,
+                                  ImagePath = imagePath };
             db.Insert(e);
             db.Close();
         }
@@ -149,7 +167,7 @@ namespace Labb2
             return e;
         }
 
-        public void UpdateEntry(int id, string date, string description, int accountNumber, int moneyAccounNumber, double total, int taxId)
+        public void UpdateEntry(int id, string date, string description, int accountNumber, int moneyAccounNumber, double total, int taxId, string imagePath)
         {
             SQLiteConnection db = new SQLiteConnection(DBPath);
             Entry e = db.Get<Entry>(id);
@@ -159,6 +177,7 @@ namespace Labb2
             e.MoneyAccountNumber = moneyAccounNumber;
             e.TotalAmount = total;
             e.TaxId = taxId;
+            e.ImagePath = imagePath;
             db.Update(e);
             db.Close();
         }
@@ -185,13 +204,5 @@ namespace Labb2
             db.Close();
             return a;
         }
-
-       /* public Account.AccountType GetAccountType(int id)
-        {
-            SQLiteConnection db = new SQLiteConnection(DBPath);
-            Account a = db.Get<Account>(id);
-            db.Close();
-            return a.Type;
-        }*/
     }
 }

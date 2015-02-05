@@ -82,7 +82,6 @@ namespace Labb2
             {
                 case Resource.Id.edit:
                     {
-                        //Toast.MakeText(this, "You clicked on the edit icon", ToastLength.Short).Show();
                         GoToUpdateActivity();
                         break;
                     }
@@ -100,6 +99,7 @@ namespace Labb2
             i.PutExtra("activityType", "update");
             i.PutExtra("entryId", entryId);
             StartActivity(i);
+            Finish();
         }
     }
 }

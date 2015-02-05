@@ -74,6 +74,7 @@
     <Compile Include="CreateReportsActivity.cs" />
     <Compile Include="EntriesAdapter.cs" />
     <Compile Include="Entry.cs" />
+    <Compile Include="ImageUtils.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

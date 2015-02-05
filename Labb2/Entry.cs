@@ -23,6 +23,7 @@ namespace Labb2
         public int MoneyAccountNumber { get; set; }
         public double TotalAmount { get; set; }
         public int TaxId { get; set; }
+        public string ImagePath { get; set; }
 
         public override string ToString()
         {

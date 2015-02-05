@@ -9,6 +9,11 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AEnvironment = Android.OS.Environment;
+using AFile = Java.IO.File;
+using AUri = Android.Net.Uri;
+using Android.Provider;
+using Android.Graphics;
 
 namespace Labb2
 {
@@ -16,13 +21,18 @@ namespace Labb2
     public class CreateNewEntryActivity : Activity
     {
         const int DATE_DIALOG_ID = 0;
+        const int CAMERA_REQUEST_CODE = 1;
+
         private EditText dateOfEntry, totalWithTax, entryDescription;
-        private Button datePickerButton, saveButton, deleteButton;
-        private DateTime date;        
+        private Button datePickerButton, saveButton, deleteButton, takePhotoButton;
+        private DateTime date;
         private RadioButton income_radio, cost_radio;
         private Spinner typeSpinner, accountSpinner, taxSpinner;
         private ArrayAdapter typeSpinnerAdapter, accountSpinnerAdapter, taxSpinnerAdapter;
         private TextView totalWithoutTax;
+        private ImageView receiptImage;
+        private AUri imagePathUri;
+        private string imagePath="";
         private string activityType;
         private BookKeeperManager bookKeeperManager;
         private int entryId;
@@ -48,6 +58,9 @@ namespace Labb2
             taxSpinner = FindViewById<Spinner>(Resource.Id.tax_spinner);
             totalWithoutTax = FindViewById<TextView>(Resource.Id.calculated_total_without_tax_text);
             totalWithTax = FindViewById<EditText>(Resource.Id.total_with_tax_edit);
+            takePhotoButton = FindViewById<Button>(Resource.Id.take_photo_button);
+            receiptImage = FindViewById<ImageView>(Resource.Id.receipt_image);
+
             saveButton = FindViewById<Button>(Resource.Id.save_entry_button);
             deleteButton = FindViewById<Button>(Resource.Id.delete_entry_button);
 
@@ -84,11 +97,6 @@ namespace Labb2
             }             
         }
 
-        protected override void OnResume()
-        {
-            base.OnResume();
-            Toast.MakeText(this, "In OnResume()", ToastLength.Short).Show();
-        }
         private void SetUpEntryDataForUpdate()
         {
             date = DateTime.Today;
@@ -125,8 +133,9 @@ namespace Labb2
             // Handle the click events on buttons and radio buttons
             datePickerButton.Click += button_DatePicker;
             saveButton.Click += button_SaveEntry;
+            takePhotoButton.Click += button_TakePhoto;
             income_radio.Click += spinner_PopulateType;
-            cost_radio.Click += spinner_PopulateType;
+            cost_radio.Click += spinner_PopulateType;            
 
             // Handle the ItemSelected event in the tax rates spinner
             taxSpinner.ItemSelected += new EventHandler<AdapterView.ItemSelectedEventArgs>(spinner_TaxSelected);
@@ -186,8 +195,50 @@ namespace Labb2
 
         public void OnDateSet(object sender, DatePickerDialog.DateSetEventArgs e)
         {
-            this.date = e.Date;
+            date = e.Date;
             UpdateDate();
+            //date = DateTime.Today;
+        }
+
+        private void button_TakePhoto(object sender, EventArgs e)
+        { 
+            // Button b = sender as Button;
+            // Button b = (Button)sender;
+            //b.setBackgroundColor();
+            AFile picDir = AEnvironment.GetExternalStoragePublicDirectory(AEnvironment.DirectoryPictures);
+            AFile receiptsDir = new AFile(picDir, "Bookkeeper");
+            if (!receiptsDir.Exists())
+            {
+                receiptsDir.Mkdirs();
+            }
+            if ("new".Equals(activityType))
+            {
+                imagePath = "receiptId" +(bookKeeperManager.GetLastEntryId() + 1) +".jpg";
+            } 
+            else if ("update".Equals(activityType))
+            {
+                imagePath = "receiptId" + entry.Id + ".jpg";
+            }
+            
+            AFile myFile = new AFile(receiptsDir, imagePath);
+
+            imagePathUri = AUri.FromFile(myFile);
+            Intent intent = new Intent(MediaStore.ActionImageCapture);
+            intent.PutExtra(MediaStore.ExtraOutput, imagePathUri);
+            StartActivityForResult(intent, CAMERA_REQUEST_CODE);
+        }
+
+        protected override void OnActivityResult(int requestCode, Result resultCode, Intent data)
+        {
+            if (requestCode == CAMERA_REQUEST_CODE && resultCode == Result.Ok)
+            {
+                int height = Resources.DisplayMetrics.HeightPixels;
+                int width = receiptImage.Width;
+                Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(imagePathUri.Path, width, height);
+                receiptImage.SetImageBitmap(bitmap);
+                Toast.MakeText(this, "Pic saved at: " + imagePath, ToastLength.Long).Show();       
+            }
+            base.OnActivityResult(requestCode, resultCode, data);
         }
      
         private void button_SaveEntry(object sender, EventArgs e)
@@ -209,7 +260,8 @@ namespace Labb2
                                                     accountId,
                                                     moneyAccountId,
                                                     Convert.ToDouble(totalWithTax.Text),
-                                                    taxRateId);
+                                                    taxRateId,
+                                                    imagePath);
                 Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
             }
             else if ("update".Equals(activityType))
@@ -221,7 +273,8 @@ namespace Labb2
                                               accountId,
                                               moneyAccountId,
                                               Convert.ToDouble(totalWithTax.Text),
-                                              taxRateId);
+                                              taxRateId,
+                                              imagePath);
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
             }
             resetEntries();

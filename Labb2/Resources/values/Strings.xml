@@ -63,6 +63,8 @@
   <string name="delete_entry_label">TA BORT</string>
   <string name="currency">kr</string>
 
+  <string name="ta_bild">TA BILD</string>
+
   <!-- ViewEntryActivity-->
   <!-- =======================-->
   <string name="view_entry_label">Händelse Detaljer</string>
