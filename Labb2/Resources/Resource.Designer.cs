@@ -1186,8 +1186,8 @@ namespace Labb2
 			// aapt resource value: 0x7f080021
 			public const int activity_chooser_view_content = 2131230753;
 			
-			// aapt resource value: 0x7f080068
-			public const int activity_view_entry_menu = 2131230824;
+			// aapt resource value: 0x7f080069
+			public const int activity_view_entry_menu = 2131230825;
 			
 			// aapt resource value: 0x7f080016
 			public const int always = 2131230742;
@@ -1222,8 +1222,8 @@ namespace Labb2
 			// aapt resource value: 0x7f080024
 			public const int default_activity_button = 2131230756;
 			
-			// aapt resource value: 0x7f080054
-			public const int delete_entry_button = 2131230804;
+			// aapt resource value: 0x7f080053
+			public const int delete_entry_button = 2131230803;
 			
 			// aapt resource value: 0x7f08001b
 			public const int dialog = 2131230747;
@@ -1234,8 +1234,8 @@ namespace Labb2
 			// aapt resource value: 0x7f08001c
 			public const int dropdown = 2131230748;
 			
-			// aapt resource value: 0x7f080069
-			public const int edit = 2131230825;
+			// aapt resource value: 0x7f08006a
+			public const int edit = 2131230826;
 			
 			// aapt resource value: 0x7f080033
 			public const int edit_query = 2131230771;
@@ -1246,14 +1246,14 @@ namespace Labb2
 			// aapt resource value: 0x7f080058
 			public const int entries_list_view = 2131230808;
 			
-			// aapt resource value: 0x7f080067
-			public const int entry_amount_text = 2131230823;
-			
-			// aapt resource value: 0x7f080065
-			public const int entry_date_text = 2131230821;
+			// aapt resource value: 0x7f080068
+			public const int entry_amount_text = 2131230824;
 			
 			// aapt resource value: 0x7f080066
-			public const int entry_desc_text = 2131230822;
+			public const int entry_date_text = 2131230822;
+			
+			// aapt resource value: 0x7f080067
+			public const int entry_desc_text = 2131230823;
 			
 			// aapt resource value: 0x7f080046
 			public const int entry_description_edit = 2131230790;
@@ -1318,14 +1318,14 @@ namespace Labb2
 			// aapt resource value: 0x7f08002b
 			public const int radio = 2131230763;
 			
-			// aapt resource value: 0x7f080052
-			public const int receipt_image = 2131230802;
+			// aapt resource value: 0x7f080054
+			public const int receipt_image = 2131230804;
 			
 			// aapt resource value: 0x7f080057
 			public const int report_button = 2131230807;
 			
-			// aapt resource value: 0x7f080053
-			public const int save_entry_button = 2131230803;
+			// aapt resource value: 0x7f080052
+			public const int save_entry_button = 2131230802;
 			
 			// aapt resource value: 0x7f080035
 			public const int search_badge = 2131230773;
@@ -1428,6 +1428,9 @@ namespace Labb2
 			
 			// aapt resource value: 0x7f08005c
 			public const int view_entry_description_text = 2131230812;
+			
+			// aapt resource value: 0x7f080065
+			public const int view_receipt_image = 2131230821;
 			
 			// aapt resource value: 0x7f080063
 			public const int view_tax_label_text = 2131230819;

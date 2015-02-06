@@ -117,4 +117,10 @@
             android:layout_marginTop="5dp"
             android:layout_marginLeft="10dp" />
     </LinearLayout>
+    <ImageView
+        android:id="@+id/view_receipt_image"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10dp" />
 </LinearLayout>

@@ -126,6 +126,7 @@ namespace Labb2
             PopulateTaxSpinner();
             TaxRate taxRate = bookKeeperManager.GetTaxRate(entry.TaxId);
             taxSpinner.SetSelection(bookKeeperManager.TaxRates.FindIndex(a => a.Id == taxRate.Id), true);
+            receiptImage.SetImageURI(AUri.Parse(entry.ImagePath));
         }
 
         private void HandleEvents()
@@ -261,7 +262,7 @@ namespace Labb2
                                                     moneyAccountId,
                                                     Convert.ToDouble(totalWithTax.Text),
                                                     taxRateId,
-                                                    imagePath);
+                                                    imagePathUri.ToString());
                 Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
             }
             else if ("update".Equals(activityType))
@@ -274,7 +275,7 @@ namespace Labb2
                                               moneyAccountId,
                                               Convert.ToDouble(totalWithTax.Text),
                                               taxRateId,
-                                              imagePath);
+                                              imagePathUri.ToString());
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
             }
             resetEntries();

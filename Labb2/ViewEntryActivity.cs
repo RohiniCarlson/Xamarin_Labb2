@@ -11,6 +11,9 @@ using Android.Views;
 using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
+using AEnvironment = Android.OS.Environment;
+using AFile = Java.IO.File;
+using AUri = Android.Net.Uri;
 
 
 namespace Labb2
@@ -20,6 +23,7 @@ namespace Labb2
     {
         private BookKeeperManager bookKeeperManager;
         private TextView date, description, transactionAccount, moneyAccount, amount, taxRate;
+        private ImageView receiptImage;
         private int entryId;
         protected override void OnCreate(Bundle bundle)
         {
@@ -40,7 +44,7 @@ namespace Labb2
             moneyAccount = FindViewById<TextView>(Resource.Id.view_to_from_account_text);
             amount = FindViewById<TextView>(Resource.Id.view_total_with_tax_text);
             taxRate = FindViewById<TextView>(Resource.Id.view_tax_text);
-
+            receiptImage = FindViewById<ImageView>(Resource.Id.view_receipt_image);
 
             entryId = Intent.GetIntExtra("EntryId", -1);
             if (entryId != -1)
@@ -63,6 +67,8 @@ namespace Labb2
                 moneyAccount.Text = cashAccount.ToString();
                 amount.Text = e.TotalAmount.ToString();
                 taxRate.Text = rate.ToString();
+                receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
+                Toast.MakeText(this, "stored image path is: " + e.ImagePath, ToastLength.Long).Show();
             }
         }
 

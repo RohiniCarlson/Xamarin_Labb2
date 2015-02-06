@@ -151,27 +151,19 @@
             android:layout_width="fill_parent"
             android:text="-" />
     </LinearLayout>
-<!-- Camera functionality -->
-    <LinearLayout
-        android:orientation="vertical"
-        android:layout_height="wrap_content"
-        android:layout_width="fill_parent">
-        <Button
-            android:id="@+id/take_photo_button"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
-            android:text="@string/ta_bild" />
-        <ImageView
-            android:id="@+id/receipt_image"
-            android:layout_height="wrap_content"
-            android:layout_width="wrap_content" />
-    </LinearLayout>
-<!-- Create new entry button -->
+<!-- Buttons -->
     <LinearLayout
         android:orientation="horizontal"
         android:layout_height="wrap_content"
         android:layout_width="fill_parent"
-        android:weightSum="2">
+        android:layout_marginTop="10dp"
+        android:weightSum="3">
+        <Button
+            android:id="@+id/take_photo_button"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:text="@string/ta_bild" />
         <Button
             android:id="@+id/save_entry_button"
             android:layout_height="wrap_content"
@@ -185,4 +177,10 @@
             android:layout_weight="1"
             android:text="@string/delete_entry_label" />
     </LinearLayout>
+<!-- Camera functionality -->
+    <ImageView
+        android:id="@+id/receipt_image"
+        android:layout_height="50dp"
+        android:layout_width="50dp"
+        android:layout_marginTop="5dp" />
 </LinearLayout>
