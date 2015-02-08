@@ -31,7 +31,7 @@ namespace Labb2
         private ArrayAdapter typeSpinnerAdapter, accountSpinnerAdapter, taxSpinnerAdapter;
         private TextView totalWithoutTax;
         private ImageView receiptImage;
-        private AUri imagePathUri;
+        private AUri imagePathUri = null;
         private string imagePath="";
         private string activityType;
         private BookKeeperManager bookKeeperManager;
@@ -126,8 +126,16 @@ namespace Labb2
             PopulateTaxSpinner();
             TaxRate taxRate = bookKeeperManager.GetTaxRate(entry.TaxId);
             taxSpinner.SetSelection(bookKeeperManager.TaxRates.FindIndex(a => a.Id == taxRate.Id), true);
-            imagePathUri = AUri.Parse(entry.ImagePath);
-            receiptImage.SetImageURI(imagePathUri);
+            if (entry.ImagePath != null && entry.ImagePath.Length > 0)
+            {
+                imagePathUri = AUri.Parse(entry.ImagePath);
+                receiptImage.SetImageURI(imagePathUri);
+            }
+            else
+            {
+                imagePathUri = null;
+            }
+           
         }
 
         private void HandleEvents()
@@ -254,8 +262,17 @@ namespace Labb2
             int moneyAccountId = GetAccountIdFromString(accountSpinner.SelectedItem.ToString());
             int taxRateId = bookKeeperManager.TaxRates.Find(t => t.Tax == Convert.ToDouble(taxRate)).Id;
 
+            string imgPath = "";
+
+            if (imagePathUri != null)
+            {
+                imgPath = imagePathUri.ToString();
+            }
+
             if("new".Equals(activityType))
             {
+                //imagePathUri==null ? null : imagePathUri.ToString()
+               
                 // Request BookKeeperManger to save the entry
                 bookKeeperManager.AddEntry(dateOfEntry.Text,
                                                     FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
@@ -263,7 +280,7 @@ namespace Labb2
                                                     moneyAccountId,
                                                     Convert.ToDouble(totalWithTax.Text),
                                                     taxRateId,
-                                                    imagePathUri==null ? null : imagePathUri.ToString());
+                                                    imgPath);
                 Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
             }
             else if ("update".Equals(activityType))
@@ -276,7 +293,7 @@ namespace Labb2
                                               moneyAccountId,
                                               Convert.ToDouble(totalWithTax.Text),
                                               taxRateId,
-                                              imagePathUri.ToString()); // What happens if image is deleted?????
+                                              imgPath); // What happens if image is deleted?????
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
             }
             resetEntries();
