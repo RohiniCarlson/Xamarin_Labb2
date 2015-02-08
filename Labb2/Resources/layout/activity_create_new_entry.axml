@@ -180,7 +180,7 @@
 <!-- Camera functionality -->
     <ImageView
         android:id="@+id/receipt_image"
-        android:layout_height="50dp"
-        android:layout_width="50dp"
+        android:layout_height="100dp"
+        android:layout_width="100dp"
         android:layout_marginTop="5dp" />
 </LinearLayout>

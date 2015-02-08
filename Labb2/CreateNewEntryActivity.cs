@@ -126,7 +126,8 @@ namespace Labb2
             PopulateTaxSpinner();
             TaxRate taxRate = bookKeeperManager.GetTaxRate(entry.TaxId);
             taxSpinner.SetSelection(bookKeeperManager.TaxRates.FindIndex(a => a.Id == taxRate.Id), true);
-            receiptImage.SetImageURI(AUri.Parse(entry.ImagePath));
+            imagePathUri = AUri.Parse(entry.ImagePath);
+            receiptImage.SetImageURI(imagePathUri);
         }
 
         private void HandleEvents()
@@ -262,7 +263,7 @@ namespace Labb2
                                                     moneyAccountId,
                                                     Convert.ToDouble(totalWithTax.Text),
                                                     taxRateId,
-                                                    imagePathUri.ToString());
+                                                    imagePathUri==null ? null : imagePathUri.ToString());
                 Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
             }
             else if ("update".Equals(activityType))
@@ -275,7 +276,7 @@ namespace Labb2
                                               moneyAccountId,
                                               Convert.ToDouble(totalWithTax.Text),
                                               taxRateId,
-                                              imagePathUri.ToString());
+                                              imagePathUri.ToString()); // What happens if image is deleted?????
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
             }
             resetEntries();
