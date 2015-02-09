@@ -22,7 +22,7 @@ namespace Labb2
             Money
         }
         [PrimaryKey]
-        public string Number { get; set; }
+        public int Number { get; set; }
         public string Name { get; set; }
         public Account.AccountType Type { get; set; }
 
