@@ -12,7 +12,7 @@ using Android.Widget;
 
 namespace Labb2
 {
-    [Activity(Label = "Alla Händelser")]   
+    [Activity(Label = "@string/show_all_entries_activity_label")]   
     public class ShowAllEntriesActivity : Activity
     {
         private ListView entriesListView;
@@ -45,7 +45,5 @@ namespace Labb2
             i.PutExtra("EntryId", entry.Id);
             StartActivity(i);
         }
-
-
     }
 }

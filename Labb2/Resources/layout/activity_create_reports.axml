@@ -3,5 +3,14 @@
     android:orientation="vertical"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
-
+    <Button
+        android:id="@+id/tax_report_button"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/tax_report" />
+    <Button
+        android:id="@+id/account_report_button"
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:text="@string/account_report" />
 </LinearLayout>

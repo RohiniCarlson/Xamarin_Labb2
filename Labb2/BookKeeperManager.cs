@@ -91,37 +91,44 @@ namespace Labb2
 
             SQLiteConnection db = new SQLiteConnection(DBPath);
             List<Entry> entryList = db.Table<Entry>().ToList();
-            db.Close();
-
-            foreach (Entry e in entryList)
+            if (entryList.Count > 0)
             {
-                reportText.Append(e.Date).Append(" - ").Append(e.Description).Append(":  ");
-               
-                if(GetAccount(e.AccountNumber).Type == Account.AccountType.Expense)
+                foreach (Entry e in entryList)
                 {
-                    expenseTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
-                    reportText.Append(" -").Append(expenseTax).Append(" kr").Append("\n");
-                    expenseTaxTotal += expenseTax;
+                    reportText.Append(e.Date).Append(" - ").Append(e.Description).Append(":  ");
+
+                    if (GetAccount(e.AccountNumber).Type == Account.AccountType.Expense)
+                    {
+                        expenseTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
+                        reportText.Append(" -").Append(expenseTax).Append(" kr").Append("\n");
+                        expenseTaxTotal += expenseTax;
+                    }
+                    else if (GetAccount(e.AccountNumber).Type == Account.AccountType.Income)
+                    {
+                        incomeTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
+                        reportText.Append(" ").Append(incomeTax).Append(" kr").Append("\n");
+                        incomeTaxTotal += incomeTax;
+                    }
                 }
-                else if (GetAccount(e.AccountNumber).Type == Account.AccountType.Income)
-                {
-                    incomeTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
-                    reportText.Append(" ").Append(incomeTax).Append(" kr").Append("\n");
-                    incomeTaxTotal += incomeTax;
-                }
+                reportText.Append("Totalt att betala: ").Append(incomeTaxTotal - expenseTaxTotal).Append(" kr");
+                db.Close();
             }
-            reportText.Append("Totalt att betala: ").Append(incomeTaxTotal - expenseTaxTotal).Append(" kr");
-            db.Close();
+            else
+            {
+                reportText.Append("No Entries");
+            }
+            
             return reportText.ToString();
         }
 
-        public string GetAccountReport()
+       public string GetAccountReport()
         {
             StringBuilder reportText = new StringBuilder();
             double accountTotal = 0;
 
             SQLiteConnection db = new SQLiteConnection(DBPath);
             IEnumerable<Account> accountList = db.Table<Account>();
+            IEnumerable<Account> moneyAccountList = accountList.Where(a => a.Type == Account.AccountType.Money);
 
             foreach (Account a in accountList)
             {
@@ -133,26 +140,25 @@ namespace Labb2
                     foreach (Entry e in entryList)
                     {
                         accountTotal += e.TotalAmount;
-                        if (GetAccount(a.Number).Type == Account.AccountType.Income)
+                        if (a.Type == Account.AccountType.Income)
                         {
                             accountDetails.Append(e.Date).Append(" - ").Append(e.Description);
                             accountDetails.Append(":  ").Append(e.TotalAmount).Append(" kr").Append("\n");
                         }
-                        else
+                        else if (a.Type == Account.AccountType.Expense)
                         {
                             accountDetails.Append(e.Date).Append(" - ").Append(e.Description);
                             accountDetails.Append(":  -").Append(e.TotalAmount).Append(" kr").Append("\n");
                         }
-                        
                     }
-                    if (GetAccount(a.Number).Type == Account.AccountType.Income)
+                    if (a.Type == Account.AccountType.Income)
                     {
-                        reportText.Append("*** ").Append(GetAccount(a.Number).Name).Append(" (").Append(a.Number);
+                        reportText.Append("*** ").Append(a.Name).Append(" (").Append(a.Number);
                         reportText.Append(" (total: " + accountTotal + " kr)").Append("\n");
                     }
-                    else
+                    else if (a.Type == Account.AccountType.Expense)
                     {
-                        reportText.Append("*** ").Append(GetAccount(a.Number).Name).Append(" (").Append(a.Number);
+                        reportText.Append("*** ").Append(a.Name).Append(" (").Append(a.Number);
                         reportText.Append(" (total: -" + accountTotal + " kr)").Append("\n");
                     }
                     reportText.Append(accountDetails);
@@ -164,8 +170,141 @@ namespace Labb2
                     reportText.Append(" (total: 0 kr").Append("\n").Append("***").Append("\n");
                 }
             }
+            double incomeTotal;
+            double expenseTotal;
+            foreach (Account account in moneyAccountList)
+            {
+                IEnumerable<Entry> entryList = db.Table<Entry>().Where(e => e.AccountNumber == account.Number);
+                if (entryList.Count() > 0)
+                {
+                    StringBuilder accountDetails = new StringBuilder();
+                    incomeTotal = 0;
+                    expenseTotal = 0;
+                    foreach (Entry entry in entryList)
+                    {
+                        if (accountList.Where(e => e.Number == entry.AccountNumber).First().Type==Account.AccountType.Income)
+                        {
+                            incomeTotal =+ entry.TotalAmount;
+                            accountDetails.Append(entry.Date).Append(" - ").Append(entry.Description);
+                            accountDetails.Append(":  ").Append(entry.TotalAmount).Append(" kr").Append("\n");
+                        }
+                        else
+                        {
+                            expenseTotal =+ entry.TotalAmount;
+                            accountDetails.Append(entry.Date).Append(" - ").Append(entry.Description);
+                            accountDetails.Append(":  -").Append(entry.TotalAmount).Append(" kr").Append("\n");
+                        }
+                    }
+                    reportText.Append("*** ").Append(account.Name).Append(" (").Append(account.Number);
+                    reportText.Append(" (total: " + (incomeTotal - expenseTotal) + " kr)").Append("\n");                    
+                }
+                else
+                {
+                    reportText.Append("*** ").Append(GetAccount(account.Number).Name).Append(" (").Append(account.Number);
+                    reportText.Append(" (total: 0 kr").Append("\n").Append("***").Append("\n");
+                }
+            }
             return reportText.ToString();
         }
+
+       /* public string GetAccountReport()
+        {
+            StringBuilder reportText = new StringBuilder();        
+            StringBuilder expenseAccountsText = new StringBuilder();
+            StringBuilder incomeAccountsText = new StringBuilder();
+            StringBuilder moneyAccountsText = new StringBuilder();
+            
+            //double accountTotal = 0;
+            double expenseAccountTotal = 0;
+            double incomeAccountTotal = 0;
+            double moneyAccountTotal = 0;
+
+            SQLiteConnection db = new SQLiteConnection(DBPath);
+            IEnumerable<Account> accountList = db.Table<Account>();
+            foreach (Account account in accountList)
+            {
+                IEnumerable<Entry> entryList = db.Table<Entry>().Where(e => e.AccountNumber == account.Number);
+                if (account.Type == Account.AccountType.Income)
+                {
+                    if (entryList.Count() > 0)
+                    {
+                        foreach (Entry entry in entryList)
+                        {
+                            incomeAccountTotal += entry.TotalAmount;
+                            incomeAccountsText.Append(entry.Date).Append(" - ").Append(entry.Description);
+                            incomeAccountsText.Append(":  ").Append(entry.TotalAmount).Append(" kr").Append("\n");
+                        }
+                        reportText.Append("*** ").Append(GetAccount(account.Number).Name).Append(" (").Append(account.Number);
+                        reportText.Append(" (total: -" + incomeAccountTotal + " kr)").Append("\n");
+                        reportText.Append(incomeAccountsText);
+                        reportText.Append("***").Append("\n");
+                        incomeAccountTotal = 0;
+                    }
+                    else
+                    {
+                        incomeAccountsText.Append("*** ").Append(GetAccount(account.Number).Name).Append(" (").Append(account.Number);
+                        incomeAccountsText.Append(" (total: 0 kr").Append("\n").Append("***").Append("\n");
+                    }
+                }
+                else if (account.Type == Account.AccountType.Expense)
+                {
+
+                }
+                else
+                {
+
+                }
+                
+                
+            }
+
+
+            /* SQLiteConnection db = new SQLiteConnection(DBPath);
+             IEnumerable<Account> accountList = db.Table<Account>();
+
+             foreach (Account a in accountList)
+             {
+                 IEnumerable<Entry> entryList = db.Table<Entry>().Where(e => e.AccountNumber == a.Number);
+                 if (entryList.Count() > 0)
+                 {
+                     StringBuilder accountDetails = new StringBuilder();
+
+                     foreach (Entry e in entryList)
+                     {
+                         accountTotal += e.TotalAmount;
+                         if (GetAccount(a.Number).Type == Account.AccountType.Income)
+                         {
+                             accountDetails.Append(e.Date).Append(" - ").Append(e.Description);
+                             accountDetails.Append(":  ").Append(e.TotalAmount).Append(" kr").Append("\n");
+                         }
+                         else if (GetAccount(a.Number).Type == Account.AccountType.Expense)
+                         {
+                             accountDetails.Append(e.Date).Append(" - ").Append(e.Description);
+                             accountDetails.Append(":  -").Append(e.TotalAmount).Append(" kr").Append("\n");
+                         }
+
+                     }
+                     if (GetAccount(a.Number).Type == Account.AccountType.Income)
+                     {
+                         reportText.Append("*** ").Append(GetAccount(a.Number).Name).Append(" (").Append(a.Number);
+                         reportText.Append(" (total: " + accountTotal + " kr)").Append("\n");
+                     }
+                     else if (GetAccount(a.Number).Type == Account.AccountType.Expense)
+                     {
+                         reportText.Append("*** ").Append(GetAccount(a.Number).Name).Append(" (").Append(a.Number);
+                         reportText.Append(" (total: -" + accountTotal + " kr)").Append("\n");
+                     }
+                     reportText.Append(accountDetails);
+                     reportText.Append("***").Append("\n");
+                 }
+                 else
+                 {
+                     reportText.Append("*** ").Append(GetAccount(a.Number).Name).Append(" (").Append(a.Number);
+                     reportText.Append(" (total: 0 kr").Append("\n").Append("***").Append("\n");
+                 }
+             }*/
+            //return reportText.ToString();
+        //}
 
         /*private string CalculateTotalForAccount(IEnumerable<Entry> listEntries, int accountNumber, bool income)
         {
@@ -196,7 +335,7 @@ namespace Labb2
                 }
                 report = report + "***" + "\n";
             }
-            return report;
+            return report; 
         }*/
 
         private BookKeeperManager()

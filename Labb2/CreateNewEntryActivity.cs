@@ -17,7 +17,7 @@ using Android.Graphics;
 
 namespace Labb2
 {
-    [Activity(Label = "Händelse")]
+    [Activity(Label = "@string/new_entry_activity_label")]
     public class CreateNewEntryActivity : Activity
     {
         const int DATE_DIALOG_ID = 0;
@@ -128,8 +128,12 @@ namespace Labb2
             taxSpinner.SetSelection(bookKeeperManager.TaxRates.FindIndex(a => a.Id == taxRate.Id), true);
             if (entry.ImagePath != null && entry.ImagePath.Length > 0)
             {
-                imagePathUri = AUri.Parse(entry.ImagePath);
-                receiptImage.SetImageURI(imagePathUri);
+                int height = Resources.DisplayMetrics.HeightPixels;
+                int width = receiptImage.Width;
+                Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(entry.ImagePath, width, height);
+                receiptImage.SetImageBitmap(bitmap);
+               // imagePathUri = AUri.Parse(entry.ImagePath);
+               // receiptImage.SetImageURI(imagePathUri);
             }
             else
             {
@@ -305,6 +309,14 @@ namespace Labb2
         private void button_DeleteEntry(object sender, EventArgs e)
         {
             bookKeeperManager.DeleteEntry(entryId);
+            if ((entry.ImagePath != null) && (entry.ImagePath.Length > 0))
+            {
+                AFile myFile = new AFile(entry.ImagePath);
+                if (myFile.Exists())
+                {
+                    myFile.Delete();
+                }                
+            }           
             Toast.MakeText(this, GetString(Resource.String.entry_deleted), ToastLength.Short).Show();
             Finish();
         }
@@ -377,6 +389,9 @@ namespace Labb2
 
             // Clear total without tax
             totalWithoutTax.Text = "";
+
+            // Clear image
+            receiptImage.SetImageBitmap(null);
         }
 
         private int getIndex(Spinner spinner, String myString)

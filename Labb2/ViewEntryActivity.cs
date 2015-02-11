@@ -12,6 +12,7 @@ using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
 using AUri = Android.Net.Uri;
+using Android.Graphics;
 
 
 namespace Labb2
@@ -67,7 +68,11 @@ namespace Labb2
                 taxRate.Text = rate.ToString();
                 if ((e.ImagePath != null) && (e.ImagePath.Length > 0))
                 {
-                    receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
+                    int height = Resources.DisplayMetrics.HeightPixels;
+                    int width = receiptImage.Width;
+                    Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(e.ImagePath, width, height);
+                    receiptImage.SetImageBitmap(bitmap);
+                    //receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
                     //Toast.MakeText(this, "stored image path is: " + e.ImagePath, ToastLength.Long).Show();
                 }                
             }

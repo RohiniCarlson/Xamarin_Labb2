@@ -8,7 +8,7 @@ using Android.OS;
 
 namespace Labb2
 {
-    [Activity(Label = "Bokförare", MainLauncher = true, Icon = "@drawable/icon")]
+    [Activity(Label = "@string/main_activity_label", MainLauncher = true, Icon = "@drawable/icon")]
     public class MainActivity : Activity
     {
         private Button newButton, showButton, reportButton;
