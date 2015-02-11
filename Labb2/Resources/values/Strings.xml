@@ -17,6 +17,7 @@
   <string name="entry_description_label">Beskrivning:</string>
   <string name="entry_created">Händelse sparad!</string>
   <string name="entry_updated">Ändringarna sparad!</string>
+  <string name="entry_deleted">Händelse borttagen!</string>
   <string name="entry_not_found">Händelsen hittats inte!</string>
   
   <!-- Type spinner -->

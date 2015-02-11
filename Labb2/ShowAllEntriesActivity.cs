@@ -26,10 +26,15 @@ namespace Labb2
             // Set our view from the "activity_show_all_entries" layout resource
             SetContentView(Resource.Layout.activity_show_all_entries);
             bookKeeperManager = BookKeeperManager.Instance;
-            entriesAdapter = new EntriesAdapter(this, bookKeeperManager.Entries);
             entriesListView = FindViewById<ListView>(Resource.Id.entries_list_view);
-            entriesListView.Adapter = entriesAdapter;
             entriesListView.ItemClick += entriesListView_ItemClick;
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            entriesAdapter = new EntriesAdapter(this, bookKeeperManager.Entries);
+            entriesListView.Adapter = entriesAdapter;
         }
 
         private void entriesListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
@@ -40,5 +45,7 @@ namespace Labb2
             i.PutExtra("EntryId", entry.Id);
             StartActivity(i);
         }
+
+
     }
 }

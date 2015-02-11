@@ -143,6 +143,7 @@ namespace Labb2
             // Handle the click events on buttons and radio buttons
             datePickerButton.Click += button_DatePicker;
             saveButton.Click += button_SaveEntry;
+            deleteButton.Click += button_DeleteEntry;
             takePhotoButton.Click += button_TakePhoto;
             income_radio.Click += spinner_PopulateType;
             cost_radio.Click += spinner_PopulateType;            
@@ -266,7 +267,8 @@ namespace Labb2
 
             if (imagePathUri != null)
             {
-                imgPath = imagePathUri.ToString();
+               // imgPath = imagePathUri.ToString();
+                imgPath = imagePathUri.Path; // Decodes to string
             }
 
             if("new".Equals(activityType))
@@ -282,6 +284,7 @@ namespace Labb2
                                                     taxRateId,
                                                     imgPath);
                 Toast.MakeText(this, GetString(Resource.String.entry_created), ToastLength.Short).Show();
+                resetEntries();
             }
             else if ("update".Equals(activityType))
             {
@@ -295,8 +298,15 @@ namespace Labb2
                                               taxRateId,
                                               imgPath); // What happens if image is deleted?????
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
+                Finish();
             }
-            resetEntries();
+        }
+
+        private void button_DeleteEntry(object sender, EventArgs e)
+        {
+            bookKeeperManager.DeleteEntry(entryId);
+            Toast.MakeText(this, GetString(Resource.String.entry_deleted), ToastLength.Short).Show();
+            Finish();
         }
 
         private int GetAccountIdFromString(string s)

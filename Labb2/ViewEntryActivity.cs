@@ -11,8 +11,6 @@ using Android.Views;
 using Android.Widget;
 using Android.Support.V7.App;
 using Android.Support.V4.View;
-using AEnvironment = Android.OS.Environment;
-using AFile = Java.IO.File;
 using AUri = Android.Net.Uri;
 
 
@@ -67,8 +65,11 @@ namespace Labb2
                 moneyAccount.Text = cashAccount.ToString();
                 amount.Text = e.TotalAmount.ToString();
                 taxRate.Text = rate.ToString();
-                receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
-                Toast.MakeText(this, "stored image path is: " + e.ImagePath, ToastLength.Long).Show();
+                if ((e.ImagePath != null) && (e.ImagePath.Length > 0))
+                {
+                    receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
+                    //Toast.MakeText(this, "stored image path is: " + e.ImagePath, ToastLength.Long).Show();
+                }                
             }
         }
 

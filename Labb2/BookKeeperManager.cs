@@ -16,11 +16,6 @@ namespace Labb2
     public class BookKeeperManager
     {
         private static BookKeeperManager instance;
-        private static List<TaxRate> taxRates;
-        private static List<Account> incomeAccounts;
-        private static List<Account> expenseAccounts;
-        private static List<Account> moneyAccounts;
-        private static List<Entry> entries;
 
         public string DBPath { get; private set; }
         public List<Account> IncomeAccounts 
@@ -28,7 +23,7 @@ namespace Labb2
             get
             {
                 SQLiteConnection db = new SQLiteConnection(DBPath);
-                incomeAccounts = db.Table<Account>().Where(ic =>ic.Type==Account.AccountType.Income).ToList();
+                List<Account> incomeAccounts = db.Table<Account>().Where(ic => ic.Type == Account.AccountType.Income).ToList();
                 db.Close();
                 return incomeAccounts;
             }
@@ -38,7 +33,7 @@ namespace Labb2
             get
             {
                 SQLiteConnection db = new SQLiteConnection(DBPath);
-                expenseAccounts = db.Table<Account>().Where(ic => ic.Type == Account.AccountType.Expense).ToList();
+                List<Account> expenseAccounts = db.Table<Account>().Where(ic => ic.Type == Account.AccountType.Expense).ToList();
                 db.Close();
                 return expenseAccounts;
             }
@@ -48,7 +43,7 @@ namespace Labb2
             get
             {
                 SQLiteConnection db = new SQLiteConnection(DBPath);
-                moneyAccounts = db.Table<Account>().Where(ic => ic.Type == Account.AccountType.Money).ToList();
+                List<Account>  moneyAccounts = db.Table<Account>().Where(ic => ic.Type == Account.AccountType.Money).ToList();
                 db.Close();
                 return moneyAccounts;
             }
@@ -58,7 +53,7 @@ namespace Labb2
             get
             {
                 SQLiteConnection db = new SQLiteConnection(DBPath);
-                taxRates = db.Table<TaxRate>().ToList();
+                List<TaxRate> taxRates = db.Table<TaxRate>().ToList();
                 db.Close();
                 return taxRates;
             } 
@@ -68,7 +63,7 @@ namespace Labb2
             get
             {
                 SQLiteConnection db = new SQLiteConnection(DBPath);
-                entries = db.Table<Entry>().ToList();
+                List<Entry> entries = db.Table<Entry>().ToList();
                 db.Close();
                 return entries;
             }
@@ -76,20 +71,19 @@ namespace Labb2
 
         public int GetLastEntryId()
         {
-            if (Entries.Count > 0)
+            int entryId = 0;
+            SQLiteConnection db = new SQLiteConnection(DBPath);
+            if (db.Table<Entry>().Count() > 0)
             {
-                Entry entry = Entries.ElementAt<Entry>(Entries.Count - 1);
-                return entry.Id;
+                entryId = db.Table<Entry>().Last().Id;
             }
-            else
-            {
-                return 0;
-            }            
+            db.Close();
+            return entryId;            
         }
 
         public string GetTaxReport()
         {
-            string report = "";
+            StringBuilder reportText = new StringBuilder();
             double incomeTaxTotal = 0.0;
             double expenseTaxTotal = 0.0;
             double incomeTax = 0.0;
@@ -100,25 +94,25 @@ namespace Labb2
             db.Close();
 
             foreach (Entry e in entryList)
-            { 
-                report = report + e.Date + " - " + e.Description +":  ";
+            {
+                reportText.Append(e.Date).Append(" - ").Append(e.Description).Append(":  ");
                
                 if(GetAccount(e.AccountNumber).Type == Account.AccountType.Expense)
                 {
                     expenseTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
-                    report = report + " -" + expenseTax + " kr" + "\n";
+                    reportText.Append(" -").Append(expenseTax).Append(" kr").Append("\n");
                     expenseTaxTotal += expenseTax;
                 }
                 else if (GetAccount(e.AccountNumber).Type == Account.AccountType.Income)
                 {
                     incomeTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
-                    report = report + " " + incomeTax + " kr" + "\n";
+                    reportText.Append(" ").Append(incomeTax).Append(" kr").Append("\n");
                     incomeTaxTotal += incomeTax;
                 }
             }
-            report = report + "Totalt att betala: " + (incomeTaxTotal - expenseTaxTotal) + " kr";
+            reportText.Append("Totalt att betala: ").Append(incomeTaxTotal - expenseTaxTotal).Append(" kr");
             db.Close();
-            return report;
+            return reportText.ToString();
         }
 
         public string GetAccountReport()
