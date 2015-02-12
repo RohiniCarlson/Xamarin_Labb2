@@ -80,6 +80,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="ShowAllEntriesActivity.cs" />
     <Compile Include="TaxRate.cs" />
+    <Compile Include="TestReport.cs" />
     <Compile Include="ViewEntryActivity.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -99,6 +100,9 @@
       <SubType>AndroidResource</SubType>
     </AndroidResource>
     <AndroidResource Include="Resources\layout\activity_view_entry.axml">
+      <SubType>AndroidResource</SubType>
+    </AndroidResource>
+    <AndroidResource Include="Resources\layout\activity_test_report.axml">
       <SubType>AndroidResource</SubType>
     </AndroidResource>
   </ItemGroup>

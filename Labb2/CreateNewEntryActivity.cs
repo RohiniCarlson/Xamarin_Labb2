@@ -359,8 +359,8 @@ namespace Labb2
         private double CalculateAmountWithoutTax(double amountWithTax, string taxRate)
         {
             double tax = Convert.ToDouble(taxRate.Substring(0, taxRate.Length - 1));
-            tax = tax / 100;
-            return (amountWithTax - (amountWithTax * tax));
+            tax = tax/100.0 + 1.0;
+            return Math.Round((amountWithTax /tax), 2);
         }
 
         private void resetEntries()

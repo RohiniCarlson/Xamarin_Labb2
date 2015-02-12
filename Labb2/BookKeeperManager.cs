@@ -99,13 +99,14 @@ namespace Labb2
 
                     if (GetAccount(e.AccountNumber).Type == Account.AccountType.Expense)
                     {
-                        expenseTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
+                        expenseTax = Math.Round(e.TotalAmount-(e.TotalAmount / ((GetTaxRate(e.TaxId).Tax /100) + 1.0)), 2);
                         reportText.Append(" -").Append(expenseTax).Append(" kr").Append("\n");
                         expenseTaxTotal += expenseTax;
                     }
                     else if (GetAccount(e.AccountNumber).Type == Account.AccountType.Income)
                     {
-                        incomeTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
+                        //incomeTax = e.TotalAmount * (GetTaxRate(e.TaxId).Tax / 100);
+                        incomeTax = Math.Round(e.TotalAmount - (e.TotalAmount / ((GetTaxRate(e.TaxId).Tax /100) + 1.0)), 2);
                         reportText.Append(" ").Append(incomeTax).Append(" kr").Append("\n");
                         incomeTaxTotal += incomeTax;
                     }
@@ -376,6 +377,10 @@ namespace Labb2
                 db.Insert(a);                
             }
             db.CreateTable<Entry>();
+            if (db.Table<Entry>().Count() == 0)
+            {
+                Entry e = new Entry() { };
+            }
             db.Close();        
         }
 
