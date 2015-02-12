@@ -22,7 +22,6 @@ namespace Labb2
         {
             base.OnCreate(bundle);
 
-            // Create your application here
             // Set our view from the "activity_show_all_entries" layout resource
             SetContentView(Resource.Layout.activity_show_all_entries);
             bookKeeperManager = BookKeeperManager.Instance;
@@ -40,7 +39,6 @@ namespace Labb2
         private void entriesListView_ItemClick(object sender, AdapterView.ItemClickEventArgs e)
         {
             Entry entry = entriesAdapter[e.Position];
-           // Toast.MakeText(this, "You have clicked on the entry with Id:" + entry.Id,ToastLength.Short).Show();
             Intent i = new Intent(this, typeof(ViewEntryActivity));
             i.PutExtra("EntryId", entry.Id);
             StartActivity(i);

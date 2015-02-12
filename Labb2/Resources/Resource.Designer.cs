@@ -1189,8 +1189,8 @@ namespace Labb2
 			// aapt resource value: 0x7f080021
 			public const int activity_chooser_view_content = 2131230753;
 			
-			// aapt resource value: 0x7f08006c
-			public const int activity_view_entry_menu = 2131230828;
+			// aapt resource value: 0x7f08006b
+			public const int activity_view_entry_menu = 2131230827;
 			
 			// aapt resource value: 0x7f080016
 			public const int always = 2131230742;
@@ -1237,8 +1237,8 @@ namespace Labb2
 			// aapt resource value: 0x7f08001c
 			public const int dropdown = 2131230748;
 			
-			// aapt resource value: 0x7f08006d
-			public const int edit = 2131230829;
+			// aapt resource value: 0x7f08006c
+			public const int edit = 2131230828;
 			
 			// aapt resource value: 0x7f080033
 			public const int edit_query = 2131230771;
@@ -1249,14 +1249,14 @@ namespace Labb2
 			// aapt resource value: 0x7f08005a
 			public const int entries_list_view = 2131230810;
 			
-			// aapt resource value: 0x7f08006b
-			public const int entry_amount_text = 2131230827;
+			// aapt resource value: 0x7f08006a
+			public const int entry_amount_text = 2131230826;
+			
+			// aapt resource value: 0x7f080068
+			public const int entry_date_text = 2131230824;
 			
 			// aapt resource value: 0x7f080069
-			public const int entry_date_text = 2131230825;
-			
-			// aapt resource value: 0x7f08006a
-			public const int entry_desc_text = 2131230826;
+			public const int entry_desc_text = 2131230825;
 			
 			// aapt resource value: 0x7f080046
 			public const int entry_description_edit = 2131230790;
@@ -1326,9 +1326,6 @@ namespace Labb2
 			
 			// aapt resource value: 0x7f080059
 			public const int report_button = 2131230809;
-			
-			// aapt resource value: 0x7f08005b
-			public const int report_text = 2131230811;
 			
 			// aapt resource value: 0x7f080052
 			public const int save_entry_button = 2131230802;
@@ -1426,44 +1423,44 @@ namespace Labb2
 			// aapt resource value: 0x7f080012
 			public const int useLogo = 2131230738;
 			
+			// aapt resource value: 0x7f08005b
+			public const int view_date_label_text = 2131230811;
+			
 			// aapt resource value: 0x7f08005c
-			public const int view_date_label_text = 2131230812;
+			public const int view_date_text = 2131230812;
 			
 			// aapt resource value: 0x7f08005d
-			public const int view_date_text = 2131230813;
+			public const int view_entry_description_label_text = 2131230813;
 			
 			// aapt resource value: 0x7f08005e
-			public const int view_entry_description_label_text = 2131230814;
-			
-			// aapt resource value: 0x7f08005f
-			public const int view_entry_description_text = 2131230815;
-			
-			// aapt resource value: 0x7f080068
-			public const int view_receipt_image = 2131230824;
-			
-			// aapt resource value: 0x7f080066
-			public const int view_tax_label_text = 2131230822;
+			public const int view_entry_description_text = 2131230814;
 			
 			// aapt resource value: 0x7f080067
-			public const int view_tax_text = 2131230823;
-			
-			// aapt resource value: 0x7f080062
-			public const int view_to_from_account_label_text = 2131230818;
-			
-			// aapt resource value: 0x7f080063
-			public const int view_to_from_account_text = 2131230819;
-			
-			// aapt resource value: 0x7f080064
-			public const int view_total_with_tax_label_text = 2131230820;
+			public const int view_receipt_image = 2131230823;
 			
 			// aapt resource value: 0x7f080065
-			public const int view_total_with_tax_text = 2131230821;
+			public const int view_tax_label_text = 2131230821;
 			
-			// aapt resource value: 0x7f080060
-			public const int view_type_label_text = 2131230816;
+			// aapt resource value: 0x7f080066
+			public const int view_tax_text = 2131230822;
 			
 			// aapt resource value: 0x7f080061
-			public const int view_type_text = 2131230817;
+			public const int view_to_from_account_label_text = 2131230817;
+			
+			// aapt resource value: 0x7f080062
+			public const int view_to_from_account_text = 2131230818;
+			
+			// aapt resource value: 0x7f080063
+			public const int view_total_with_tax_label_text = 2131230819;
+			
+			// aapt resource value: 0x7f080064
+			public const int view_total_with_tax_text = 2131230820;
+			
+			// aapt resource value: 0x7f08005f
+			public const int view_type_label_text = 2131230815;
+			
+			// aapt resource value: 0x7f080060
+			public const int view_type_text = 2131230816;
 			
 			// aapt resource value: 0x7f08001a
 			public const int withText = 2131230746;
@@ -1582,16 +1579,13 @@ namespace Labb2
 			public const int activity_show_all_entries = 2130903066;
 			
 			// aapt resource value: 0x7f03001b
-			public const int activity_test_report = 2130903067;
+			public const int activity_view_entry = 2130903067;
 			
 			// aapt resource value: 0x7f03001c
-			public const int activity_view_entry = 2130903068;
+			public const int entry_list_item = 2130903068;
 			
 			// aapt resource value: 0x7f03001d
-			public const int entry_list_item = 2130903069;
-			
-			// aapt resource value: 0x7f03001e
-			public const int support_simple_spinner_dropdown_item = 2130903070;
+			public const int support_simple_spinner_dropdown_item = 2130903069;
 			
 			static Layout()
 			{

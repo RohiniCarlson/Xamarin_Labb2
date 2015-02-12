@@ -55,14 +55,6 @@ namespace Labb2
                 date.Text = e.Date;
                 description.Text = e.Description;
                 transactionAccount.Text = account.ToString();
-               /* if (account.Type == Account.AccountType.Income)
-                {
-                    transactionAccount.SetTextColor(Android.Graphics.Color.PaleTurquoise);
-                }
-                else if (account.Type == Account.AccountType.Expense)
-                {
-                    transactionAccount.SetTextColor(Android.Graphics.Color.Orange);
-                }*/
                 moneyAccount.Text = cashAccount.ToString();
                 amount.Text = e.TotalAmount.ToString();
                 taxRate.Text = rate.ToString();
@@ -72,8 +64,6 @@ namespace Labb2
                     int width = receiptImage.Width;
                     Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(e.ImagePath, width, height);
                     receiptImage.SetImageBitmap(bitmap);
-                    //receiptImage.SetImageURI(AUri.Parse(e.ImagePath));
-                    //Toast.MakeText(this, "stored image path is: " + e.ImagePath, ToastLength.Long).Show();
                 }                
             }
         }

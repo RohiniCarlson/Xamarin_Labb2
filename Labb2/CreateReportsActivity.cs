@@ -9,6 +9,7 @@ using Android.OS;
 using Android.Runtime;
 using Android.Views;
 using Android.Widget;
+using AUri = Android.Net.Uri;
 
 namespace Labb2
 {
@@ -20,8 +21,6 @@ namespace Labb2
         {
             base.OnCreate(bundle);
 
-            // Create your application here
-            // Set our view from the "activity_create_reports" layout resource
             SetContentView(Resource.Layout.activity_create_reports);
             taxReportButton = FindViewById<Button>(Resource.Id.tax_report_button);
             accountReportButton = FindViewById<Button>(Resource.Id.account_report_button);
@@ -31,12 +30,24 @@ namespace Labb2
 
         private void CreateTaxReport(object sender, EventArgs e)
         {
-
+            string reportText = BookKeeperManager.Instance.GetTaxReport();
+            string subject = Resource.String.tax_report.ToString();
+            AUri uri = AUri.Parse("mailto:default@recipient.com");
+            Intent emailIntent = new Intent(Intent.ActionSendto, uri);
+            emailIntent.PutExtra(Intent.ExtraSubject, subject);
+            emailIntent.PutExtra(Intent.ExtraText, reportText);
+            StartActivity(emailIntent);
         }
 
         private void CreateAccountReport(object sender, EventArgs e)
         {
-
+            string reportText = BookKeeperManager.Instance.GetAccountReport();
+            string subject = Resource.String.account_report.ToString();
+            AUri uri = AUri.Parse("mailto:default@recipient.com");
+            Intent emailIntent = new Intent(Intent.ActionSendto, uri);
+            emailIntent.PutExtra(Intent.ExtraSubject, subject);
+            emailIntent.PutExtra(Intent.ExtraText, reportText);
+            StartActivity(emailIntent);
         }
     }
 }

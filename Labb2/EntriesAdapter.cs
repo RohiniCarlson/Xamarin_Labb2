@@ -34,11 +34,6 @@ namespace Labb2
             get { return entryList[position]; }
         }
 
-       /* public Entry GetObject(int position)
-        {
-            return entryList[position];
-        }*/
-
         public override long GetItemId(int position)
         {
             return entryList[position].Id;
@@ -46,18 +41,6 @@ namespace Labb2
 
         public override View GetView(int position, View convertView, ViewGroup parent)
         {
-            /*
-             * View view;
-             * 
-             * if (convertView == null)
-             * {
-             *      view = activity.LayoutInflater.Inflate(Resource.Layout.entry_list_item, parent, false);
-             * }
-             * else
-             * {
-             *      view = convertView;
-             * }
-             */
             View view = convertView ?? activity.LayoutInflater.Inflate(Resource.Layout.entry_list_item, parent, false);
             TextView entryDate = view.FindViewById<TextView>(Resource.Id.entry_date_text);
             TextView entryDescription = view.FindViewById<TextView>(Resource.Id.entry_desc_text);

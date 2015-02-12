@@ -78,8 +78,6 @@ namespace Labb2
             }
             else if ("update".Equals(activityType))
             {
-                // As soon as user changes something, enable savebutton
-                // saveButton.Enabled = false;
                 entryId = Intent.GetIntExtra("entryId", -1);
                 if (entryId != -1)
                 {
@@ -132,8 +130,6 @@ namespace Labb2
                 int width = receiptImage.Width;
                 Bitmap bitmap = ImageUtils.LoadAndScaleBitmap(entry.ImagePath, width, height);
                 receiptImage.SetImageBitmap(bitmap);
-               // imagePathUri = AUri.Parse(entry.ImagePath);
-               // receiptImage.SetImageURI(imagePathUri);
             }
             else
             {
@@ -212,14 +208,10 @@ namespace Labb2
         {
             date = e.Date;
             UpdateDate();
-            //date = DateTime.Today;
         }
 
         private void button_TakePhoto(object sender, EventArgs e)
         { 
-            // Button b = sender as Button;
-            // Button b = (Button)sender;
-            //b.setBackgroundColor();
             AFile picDir = AEnvironment.GetExternalStoragePublicDirectory(AEnvironment.DirectoryPictures);
             AFile receiptsDir = new AFile(picDir, "Bookkeeper");
             if (!receiptsDir.Exists())
@@ -253,7 +245,6 @@ namespace Labb2
                 receiptImage.SetImageBitmap(bitmap);       
             }
             base.OnActivityResult(requestCode, resultCode, data);
-            Toast.MakeText(this, "Pic saved at: " + imagePath, ToastLength.Long).Show();
         }
      
         private void button_SaveEntry(object sender, EventArgs e)
@@ -271,14 +262,11 @@ namespace Labb2
 
             if (imagePathUri != null)
             {
-               // imgPath = imagePathUri.ToString();
                 imgPath = imagePathUri.Path; // Decodes to string
             }
 
             if("new".Equals(activityType))
-            {
-                //imagePathUri==null ? null : imagePathUri.ToString()
-               
+            {               
                 // Request BookKeeperManger to save the entry
                 bookKeeperManager.AddEntry(dateOfEntry.Text,
                                                     FindViewById<EditText>(Resource.Id.entry_description_edit).Text,
@@ -300,7 +288,7 @@ namespace Labb2
                                               moneyAccountId,
                                               Convert.ToDouble(totalWithTax.Text),
                                               taxRateId,
-                                              imgPath); // What happens if image is deleted?????
+                                              imgPath);
                 Toast.MakeText(this, GetString(Resource.String.entry_updated), ToastLength.Short).Show();
                 Finish();
             }
@@ -367,7 +355,6 @@ namespace Labb2
         {
             // Reset date to current date
             dateOfEntry.Text = DateTime.Today.ToString("yyyy-MM-dd");
-            //dateOfEntry.Text = DateTime.Today.ToString("d");
 
             // Select income radio button
             income_radio.Checked = true;
