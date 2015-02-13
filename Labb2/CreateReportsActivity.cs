@@ -31,7 +31,7 @@ namespace Labb2
         private void CreateTaxReport(object sender, EventArgs e)
         {
             string reportText = BookKeeperManager.Instance.GetTaxReport();
-            string subject = Resource.String.tax_report.ToString();
+            string subject = GetString(Resource.String.tax_report);
             AUri uri = AUri.Parse("mailto:default@recipient.com");
             Intent emailIntent = new Intent(Intent.ActionSendto, uri);
             emailIntent.PutExtra(Intent.ExtraSubject, subject);
@@ -42,7 +42,7 @@ namespace Labb2
         private void CreateAccountReport(object sender, EventArgs e)
         {
             string reportText = BookKeeperManager.Instance.GetAccountReport();
-            string subject = Resource.String.account_report.ToString();
+            string subject = GetString(Resource.String.account_report);
             AUri uri = AUri.Parse("mailto:default@recipient.com");
             Intent emailIntent = new Intent(Intent.ActionSendto, uri);
             emailIntent.PutExtra(Intent.ExtraSubject, subject);
